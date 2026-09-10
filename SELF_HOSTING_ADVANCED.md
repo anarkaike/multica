@@ -236,6 +236,8 @@ Agent-specific overrides:
 | `MULTICA_PI_MODEL` | Override the Pi model used |
 | `MULTICA_CURSOR_PATH` | Custom path to the `cursor-agent` binary |
 | `MULTICA_CURSOR_MODEL` | Override the Cursor Agent model used |
+| `MULTICA_DEVIN_PATH` | Custom path to the `devin` binary (default: `devin`; use `devin-orig` if you renamed the executable to avoid a PATH conflict) |
+| `MULTICA_DEVIN_MODEL` | Override the Devin model used (e.g. `swe-1-7`) |
 | `MULTICA_GROK_PATH` | Custom path to the `grok` binary |
 | `MULTICA_GROK_MODEL` | Override the Grok model used (e.g. `grok-4.5`) |
 
@@ -588,6 +590,32 @@ HTTP requests (Plugin API, issues, comments, uploads) work on LAN out of the box
 **Also required: allowlist the browser origin.** The two options above fix the WebSocket *upgrade proxying*, but a second, independent setting gates the connection: the backend validates the WebSocket `Origin` header against an allowlist that defaults to `localhost` only. When you open Multica from any other origin — a LAN IP **or a public domain behind a reverse proxy** — set `CORS_ALLOWED_ORIGINS` (or `FRONTEND_ORIGIN`) on the backend to that exact origin and restart, exactly as shown under [LAN / Non-localhost Access](#lan--non-localhost-access) above. Otherwise the upgrade is refused with `403`: the backend logs `websocket: request origin not allowed by Upgrader.CheckOrigin` and the browser console loops `disconnected, reconnecting in 3s`, while HTTP requests (and manual page refreshes) keep working because they are same-origin to the page. The single value covers both HTTP CORS and the WebSocket origin check.
 
 > **Note:** If you need to hard-code a different public API / WebSocket endpoint into the web image for any other reason, use the same source-build override: `docker compose -f docker-compose.selfhost.yml -f docker-compose.selfhost.build.yml up -d --build`.
+
+### Tailscale / WSL Access
+
+If the Multica server runs in WSL and you reach it from macOS or Windows over a Tailscale IP, a stable hostname makes the URL much easier to use. Pick a hostname (for example `multica-wsl.local`) and map it to the Tailscale IP on each client:
+
+```bash
+# macOS / Linux
+sudo sh -c 'echo "100.69.200.87 multica-wsl.local multica-wsl" >> /etc/hosts'
+
+# Windows PowerShell (run as Administrator)
+Add-Content -Path "$env:SystemRoot\System32\drivers\etc\hosts" -Value "100.69.200.87 multica-wsl.local multica-wsl"
+```
+
+Then configure the backend to accept that origin and rebuild the frontend image so the build-time WebSocket URL is correct:
+
+```bash
+# .env on the WSL host
+FRONTEND_ORIGIN=http://multica-wsl.local:8080
+CORS_ALLOWED_ORIGINS=http://multica-wsl.local:8080
+NEXT_PUBLIC_WS_URL=ws://multica-wsl.local:8080/ws
+
+# Rebuild and restart the web container
+docker compose -f docker-compose.selfhost.yml -f docker-compose.selfhost.build.yml up -d --build frontend
+```
+
+The `Caddyfile` in the self-host stack listens on `*:8080` and routes `/api`, `/ws`, `/uploads`, `/v1` and `/health` to the backend, so a single `http://multica-wsl.local:8080` URL serves both frontend and backend without an extra reverse proxy.
 
 ## Health Check
 

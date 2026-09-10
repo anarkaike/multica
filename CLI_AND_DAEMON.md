@@ -210,6 +210,7 @@ The daemon auto-detects these AI CLIs on your PATH:
 | [Huawei Cloud CodeArts](https://support.huaweicloud.com/usermanual-cli/codeartsagent_cli_0001.html) | `codearts` | Huawei Cloud coding agent (OpenCode-compatible JSON protocol) |
 | [DevEco Code](https://gitcode.com/openharmony-sig/deveco-code) | `deveco` | OpenHarmony DevEco Code |
 | [Codex](https://github.com/openai/codex) | `codex` | OpenAI's coding agent |
+| [Devin CLI](https://docs.devin.ai/integrations/acp) | `devin` | Cognition Devin CLI (ACP via `devin acp`) |
 | [GitHub Copilot CLI](https://docs.github.com/en/copilot) | `copilot` | GitHub's coding agent (model routed by your GitHub entitlement) |
 | OpenCode | `opencode` | Open-source coding agent |
 | OpenClaw | `openclaw` | Open-source coding agent |
@@ -231,6 +232,10 @@ The daemon auto-detects these AI CLIs on your PATH:
 | [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) | `dsh` | DeepSeek Harness (`dsh --profile multica --stdio`; requires the Multica runtime profile to be installed; reads AGENTS.md and .dsh/skills/) |
 
 You need at least one installed. The daemon registers each detected CLI as an available runtime.
+
+#### Devin CLI
+
+The daemon detects `devin` (or `devin-orig` if you renamed the binary) by default. Set `MULTICA_DEVIN_PATH` to override the executable and `MULTICA_DEVIN_MODEL` to select a specific model (for example `swe-1-7`). Devin runs over the ACP protocol (`devin acp`) using stdin/stdout JSON-RPC and supports the full Multica runtime lifecycle: `session/new`, `session/load`, `session/set_model`, `session/prompt`, resumption and cancellation.
 
 ### How It Works
 
