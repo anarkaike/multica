@@ -6070,6 +6070,7 @@ var runtimeDisplayNameOverrides = map[string]string{
 	"traecli":    "Trae",
 	"grok":       "Grok",
 	"qoderclicn": "Qoder CN",
+	"devin":      "Devin",
 	"qwen":       "Qwen Code",
 	"qwenpaw":    "QwenPaw",
 	"mcode":      "MiniMax Code",

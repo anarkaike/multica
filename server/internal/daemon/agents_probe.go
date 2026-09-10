@@ -303,6 +303,12 @@ var probeAgentCLIs = func() map[string]AgentEntry {
 	if e, ok := probe("MULTICA_ZEROCLAW_PATH", "zeroclaw", ""); ok {
 		agents["zeroclaw"] = e
 	}
+	// Devin CLI (`devin`) exposes an ACP v1 server through `devin-orig acp`.
+	// MULTICA_DEVIN_MODEL seeds the daemon-wide default model (a model id from
+	// the user's logged-in Devin catalog, e.g. `swe-1-7`).
+	if e, ok := probe("MULTICA_DEVIN_PATH", "devin-orig", "MULTICA_DEVIN_MODEL"); ok {
+		agents["devin"] = e
+	}
 	return agents
 }
 
