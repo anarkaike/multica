@@ -236,7 +236,7 @@ Agent-specific overrides:
 | `MULTICA_PI_MODEL` | Override the Pi model used |
 | `MULTICA_CURSOR_PATH` | Custom path to the `cursor-agent` binary |
 | `MULTICA_CURSOR_MODEL` | Override the Cursor Agent model used |
-| `MULTICA_DEVIN_PATH` | Custom path to the `devin` binary (default: `devin`; use `devin-orig` if you renamed the executable to avoid a PATH conflict) |
+| `MULTICA_DEVIN_PATH` | Custom path to the `devin` binary (default: `devin`) |
 | `MULTICA_DEVIN_MODEL` | Override the Devin model used (e.g. `swe-1-7`) |
 | `MULTICA_GROK_PATH` | Custom path to the `grok` binary |
 | `MULTICA_GROK_MODEL` | Override the Grok model used (e.g. `grok-4.5`) |

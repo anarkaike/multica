@@ -235,7 +235,7 @@ You need at least one installed. The daemon registers each detected CLI as an av
 
 #### Devin CLI
 
-The daemon detects `devin` (or `devin-orig` if you renamed the binary) by default. Set `MULTICA_DEVIN_PATH` to override the executable and `MULTICA_DEVIN_MODEL` to select a specific model (for example `swe-1-7`). Devin runs over the ACP protocol (`devin acp`) using stdin/stdout JSON-RPC and supports the full Multica runtime lifecycle: `session/new`, `session/load`, `session/set_model`, `session/prompt`, resumption and cancellation.
+The daemon detects `devin` by default. Set `MULTICA_DEVIN_PATH` to override the executable and `MULTICA_DEVIN_MODEL` to select a specific model (for example `swe-1-7`). Devin runs over the ACP protocol (`devin acp`) using stdin/stdout JSON-RPC and supports the full Multica runtime lifecycle: `session/new`, `session/load`, `session/set_model`, `session/prompt`, resumption and cancellation.
 
 ### How It Works
 

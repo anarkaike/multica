@@ -22,7 +22,7 @@ var devinBlockedArgs = map[string]blockedArgMode{
 	"acp": blockedStandalone,
 }
 
-// devinBackend implements Backend by spawning `devin-orig acp` and communicating
+// devinBackend implements Backend by spawning `devin acp` and communicating
 // via the standard ACP JSON-RPC 2.0 transport over stdin/stdout.
 //
 // Devin CLI (the Cognition Agent Client Protocol server) advertises ACP v1,
@@ -35,7 +35,7 @@ type devinBackend struct {
 func (b *devinBackend) Execute(ctx context.Context, prompt string, opts ExecOptions) (*Session, error) {
 	execPath := b.cfg.ExecutablePath
 	if execPath == "" {
-		execPath = "devin-orig"
+		execPath = "devin"
 	}
 	if _, err := exec.LookPath(execPath); err != nil {
 		return nil, fmt.Errorf("devin executable not found at %q: %w", execPath, err)
@@ -354,12 +354,12 @@ func waitForACPNotificationQuiescenceWithJoin(readerDone, stderrDone <-chan stru
 
 // discoverDevinModels enumerates the models Devin CLI reports as usable.
 // Devin's ACP session/new does not currently expose a model catalog, so we
-// parse `devin-orig models list` and fall back to a small static catalog if
+// parse `devin models list` and fall back to a small static catalog if
 // that fails or is unavailable.
 func discoverDevinModels(ctx context.Context, runtimeCmd Command) ([]Model, error) {
 	execPath := runtimeCmd.Path
 	if execPath == "" {
-		execPath = "devin-orig"
+		execPath = "devin"
 	}
 	if _, err := exec.LookPath(execPath); err != nil {
 		return devinStaticModels(), nil

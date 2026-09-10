@@ -524,7 +524,7 @@ var launchHeaders = map[string]string{
 	"dim":         "dim acp",
 	"mcode":       "mcode acp",
 	"zeroclaw":    "zeroclaw acp",
-	"devin":       "devin-orig acp",
+	"devin":       "devin acp",
 }
 
 // LaunchHeader returns the user-visible launch skeleton for agentType, or an
