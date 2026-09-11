@@ -175,12 +175,13 @@ func (b *devinBackend) Execute(ctx context.Context, prompt string, opts ExecOpti
 	}()
 
 	go func() {
-		defer cancel()
 		defer close(msgCh)
 		defer close(resCh)
 		defer func() {
 			stdin.Close()
+			cancel()
 			_ = cmd.Wait()
+			releaseProcessGroup(cmd)
 		}()
 
 		startTime := time.Now()
@@ -188,6 +189,7 @@ func (b *devinBackend) Execute(ctx context.Context, prompt string, opts ExecOpti
 		var finalError string
 		var sessionID string
 		effectiveModel := strings.TrimSpace(opts.Model)
+		var resumeRejected bool
 
 		initResult, err := c.request(runCtx, "initialize", map[string]any{
 			"protocolVersion": 1,
@@ -245,9 +247,9 @@ func (b *devinBackend) Execute(ctx context.Context, prompt string, opts ExecOpti
 				"mcpServers": mcpServers,
 			})
 			if err != nil {
-				finalStatus = "failed"
-				finalError = fmt.Sprintf("devin session/load failed: %v", err)
-				resCh <- Result{Status: finalStatus, Error: finalError, DurationMs: time.Since(startTime).Milliseconds()}
+				finalStatus, finalError = "failed", fmt.Sprintf("devin session/load failed: %v", err)
+				resumeRejected = isACPSessionNotFound(err)
+				resCh <- Result{Status: finalStatus, Error: finalError, DurationMs: time.Since(startTime).Milliseconds(), ResumeRejected: resumeRejected}
 				return
 			}
 			var changed bool
@@ -330,6 +332,7 @@ func (b *devinBackend) Execute(ctx context.Context, prompt string, opts ExecOpti
 						"session_id", sessionID,
 					)
 					sessionID = ""
+					resumeRejected = true
 				}
 			}
 		} else {
