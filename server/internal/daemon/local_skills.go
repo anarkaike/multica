@@ -7,6 +7,7 @@ import (
 	"log/slog"
 	"os"
 	"path/filepath"
+	"runtime"
 	"sort"
 	"strings"
 	"unicode/utf8"
@@ -134,7 +135,15 @@ func localSkillRootsForProvider(provider string) ([]localSkillRoot, bool, error)
 	// common construction below so universal roots, merging, and fallback
 	// import all still apply — same as every protocol-family provider.
 	if desc, ok := agent.BuiltinRuntimeByID(provider); ok {
-		providerRoot = filepath.Join(home, desc.UserSkillsDir)
+		if runtime.GOOS == "windows" && desc.UserSkillsDirWindows != "" {
+			appData := strings.TrimSpace(os.Getenv("APPDATA"))
+			if appData == "" {
+				appData = filepath.Join(home, "AppData", "Roaming")
+			}
+			providerRoot = filepath.Join(appData, desc.UserSkillsDirWindows)
+		} else {
+			providerRoot = filepath.Join(home, desc.UserSkillsDir)
+		}
 	} else {
 		switch provider {
 		case "claude":

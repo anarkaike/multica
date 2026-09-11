@@ -45,7 +45,8 @@ type BuiltinRuntime struct {
 
 	// UserSkillsDir is the user-level skills directory relative to $HOME
 	// (e.g. ".omp/agent/skills").
-	UserSkillsDir string
+	UserSkillsDir        string
+	UserSkillsDirWindows string
 
 	// LaunchHeader is the user-visible launch skeleton shown in the UI
 	// (e.g. "omp (json mode)").
@@ -101,17 +102,18 @@ var BuiltinRuntimes = []BuiltinRuntime{
 	{
 		// Host-local Devin CLI over ACP. Not cloud Devin VMs / Playbooks / Secrets.
 		// ProtocolFamily is "devin" so ResolveBackend/New dispatch to devinBackend.
-		ID:                "devin",
-		ProtocolFamily:    "devin",
-		DefaultCommand:    "devin",
-		EnvPrefix:         "MULTICA_DEVIN",
-		DisplayName:       "Devin",
-		SkillsDir:         ".devin/skills",
-		UserSkillsDir:     ".config/devin/skills",
-		LaunchHeader:      "devin acp",
-		DefaultExecutable: "devin",
-		ProviderLabel:     "devin",
-		ModelDiscovery:    discoverDevinModels,
+		ID:                   "devin",
+		ProtocolFamily:       "devin",
+		DefaultCommand:       "devin",
+		EnvPrefix:            "MULTICA_DEVIN",
+		DisplayName:          "Devin",
+		SkillsDir:            ".devin/skills",
+		UserSkillsDir:        ".config/devin/skills",
+		UserSkillsDirWindows: "devin/skills",
+		LaunchHeader:         "devin acp",
+		DefaultExecutable:    "devin",
+		ProviderLabel:        "devin",
+		ModelDiscovery:       discoverDevinModels,
 	},
 }
 
