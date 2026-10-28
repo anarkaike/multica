@@ -1,0 +1,23 @@
+:8080 {
+	handle /api/* {
+		reverse_proxy localhost:8181
+	}
+	handle /ws {
+		reverse_proxy localhost:8181
+	}
+	handle /ws/* {
+		reverse_proxy localhost:8181
+	}
+	handle /uploads/* {
+		reverse_proxy localhost:8181
+	}
+	handle /v1/* {
+		reverse_proxy localhost:8181
+	}
+	handle /health {
+		reverse_proxy localhost:8181
+	}
+	handle {
+		reverse_proxy localhost:3100
+	}
+}

@@ -110,6 +110,10 @@ function checkForUpdatesOnce(): Promise<unknown> {
 }
 
 export function setupAutoUpdater(getMainWindow: () => BrowserWindow | null): void {
+  // Local development builds are intentionally isolated from the official
+  // release channel. The local Desktop carries workspace-specific UI changes
+  // and must never replace itself with an official binary automatically.
+  if (app.getName() === "Multica Local") return;
   const preferencesFilePath = updaterPreferencesPath(app.getPath("userData"));
   let automaticUpdatesEnabled =
     DEFAULT_UPDATER_PREFERENCES.automaticUpdates;

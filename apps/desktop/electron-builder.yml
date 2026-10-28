@@ -1,5 +1,5 @@
-appId: ai.multica.desktop
-productName: Multica
+appId: ai.multica.desktop.local
+productName: Multica Local
 directories:
   buildResources: build
 files:
